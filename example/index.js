@@ -18,6 +18,7 @@ window.add = document.querySelectorAll('.q1')
 window.add1 = document.querySelectorAll('.q2')
 
 const set = {
+  elements: add,
   setAmount: [5,150,30,50,100,300,1000,3000,5000],
   toggle: true,
   prefix: '',
@@ -26,12 +27,6 @@ const set = {
 }
 
 const s = QuickSelect.init(set)
-
-const fff = document.querySelectorAll('.q1')
-
-for (var el in fff) {
-  s.push(fff[el])
-}
 
 window.v = {setAmount: setAmount}
 window.b = {toggle: true}

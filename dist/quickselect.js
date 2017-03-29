@@ -42,10 +42,10 @@
     var event = handler(this.init);
 
     this.unbind = function () {
-      event.div.remove();
       for (var item in event.arr) {
         event.arr[item].obj.removeEventListener(event.arr[item].e, event.arr[item].fn);
       }
+      event.div.remove();
     };
 
     this.push = function (el) {
@@ -57,17 +57,16 @@
 
       _this.init.elements = _this.init.elements.concat(initEl);
 
-      event.arr = event.arr.concat(addInput({
-        elements: initEl,
-        toggle: _this.init.toggle
-      }, event.div));
+      event.arr = event.arr.concat(addInput(initEl, _this.init, event.div));
     };
 
     this.update = function (init) {
       var newInit = initial(init);
+
       for (var key in init) {
         _this.init[key] = newInit[key];
       }
+
       _this.unbind();
       event = handler(_this.init);
     };
@@ -116,7 +115,8 @@
         arr.push(bind(div, 'mouseout', function () {
           QuickSelect.active = false;
         }));
-        arr = arr.concat(addInput(init, div));
+
+        arr = arr.concat(addInput(init.elements, init, div));
 
         var _loop = function _loop(key) {
           bind(cea('a', div, '', init.lang(init.setAmount[key]).msg), 'click', function () {
@@ -144,15 +144,15 @@
     }
   }
 
-  function addInput(init, div) {
+  function addInput(elements, init, div) {
     var arr = [];
 
     var _loop2 = function _loop2(obj) {
-      arr.push(bind(init.elements[obj], 'focus', function () {
+      arr.push(bind(elements[obj], 'focus', function () {
         if (init.toggle !== false) {
-          addInput.select = init.elements[obj];
+          addInput.select = elements[obj];
           div.style.display = 'block';
-          var i = init.elements[obj].getBoundingClientRect();
+          var i = elements[obj].getBoundingClientRect();
           var d = div.getBoundingClientRect();
           var s = { top: (i.top - d.height < 0 ? i.top + i.height : i.top - d.height) + 'px', left: i.left + i.width / 2 - d.width / 2 + 'px' };
           for (var atr in s) {
@@ -161,14 +161,14 @@
         }
       }));
 
-      arr.push(bind(init.elements[obj], 'blur', function () {
+      arr.push(bind(elements[obj], 'blur', function () {
         if (!QuickSelect.active) {
           div.style.display = 'none';
         }
       }));
     };
 
-    for (var obj in init.elements) {
+    for (var obj in elements) {
       _loop2(obj);
     }
     return arr;
@@ -184,11 +184,13 @@
       '[object HTMLInputElement]': Array(el),
       '[object NodeList]': el
     };
+
     return setEl[el.toString()];
   }
 
   function cea(t, a, atr, i) {
     var el = document.createElement(t);
+
     if (atr !== {}) {
       for (var key in atr) {
         el.setAttribute(key, atr[key]);

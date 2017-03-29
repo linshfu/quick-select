@@ -6,10 +6,10 @@ export default function QuickSelect(init = {}) {
   let event = handler(this.init)
 
   this.unbind = () => {
-    event.div.remove()
     for (let item in event.arr) {
       event.arr[item].obj.removeEventListener(event.arr[item].e, event.arr[item].fn)
     }
+    event.div.remove()
   }
 
   this.push = (el) => {
@@ -21,17 +21,16 @@ export default function QuickSelect(init = {}) {
 
     this.init.elements = this.init.elements.concat(initEl)
 
-    event.arr = event.arr.concat(addInput({
-      elements: initEl,
-      toggle: this.init.toggle
-    }, event.div))
+    event.arr = event.arr.concat(addInput(initEl, this.init, event.div))
   }
 
   this.update = (init) => {
     const newInit = initial(init)
+
     for (var key in init) {
       this.init[key] = newInit[key]
     }
+
     this.unbind()
     event = handler(this.init)
   }
@@ -73,7 +72,8 @@ function handler(init) {
     arr.push(bind(div, 'mouseout', () => {
       QuickSelect.active = false
     }))
-    arr = arr.concat(addInput(init, div))
+
+    arr = arr.concat(addInput(init.elements, init, div))
 
     for (let key in init.setAmount) {
       bind(cea('a', div, '', init.lang(init.setAmount[key]).msg), 'click', () => {
@@ -92,14 +92,15 @@ function handler(init) {
   }
 }
 
-function addInput(init, div) {
+function addInput(elements, init, div) {
   const arr = []
-  for (let obj in init.elements) {
-    arr.push(bind(init.elements[obj], 'focus', () => {
+
+  for (let obj in elements) {
+    arr.push(bind(elements[obj], 'focus', () => {
       if (init.toggle !== false) {
-        addInput.select = init.elements[obj]
+        addInput.select = elements[obj]
         div.style.display = 'block'
-        const i = init.elements[obj].getBoundingClientRect()
+        const i = elements[obj].getBoundingClientRect()
         const d = div.getBoundingClientRect()
         const s = { top: `${(i.top - d.height < 0) ? i.top + i.height : i.top - d.height}px`, left: `${i.left + i.width / 2 - d.width /2}px`}
         for(let atr in s){
@@ -108,7 +109,7 @@ function addInput(init, div) {
       }
     }))
 
-    arr.push(bind(init.elements[obj], 'blur', () => {
+    arr.push(bind(elements[obj], 'blur', () => {
       if (!QuickSelect.active) {
         div.style.display = 'none'
       }
@@ -127,11 +128,13 @@ function elArray(el) {
     '[object HTMLInputElement]': Array(el),
     '[object NodeList]': el
   }
+
   return setEl[el.toString()]
 }
 
 function cea(t, a, atr, i) {
   const el = document.createElement(t)
+
   if(atr !== {}) {
     for(let key in atr) {
       el.setAttribute(key, atr[key])
