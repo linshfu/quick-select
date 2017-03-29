@@ -49,11 +49,14 @@
     };
 
     this.push = function (el) {
-      var initEl = initial({ elements: el }).elements;
-      if (initEl === []) {
+      var elArr = elArray(el);
+      if (elArr === undefined) {
         return;
       }
+      var initEl = initial({ elements: elArr }).elements;
+
       _this.init.elements = _this.init.elements.concat(initEl);
+
       event.arr = event.arr.concat(addInput({
         elements: initEl,
         toggle: _this.init.toggle
@@ -174,6 +177,14 @@
   function bind(e, t, c) {
     e.addEventListener(t, c);
     return { obj: e, e: t, fn: c };
+  }
+
+  function elArray(el) {
+    var setEl = {
+      '[object HTMLInputElement]': Array(el),
+      '[object NodeList]': el
+    };
+    return setEl[el.toString()];
   }
 
   function cea(t, a, atr, i) {

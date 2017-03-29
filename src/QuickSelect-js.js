@@ -13,11 +13,14 @@ export default function QuickSelect(init = {}) {
   }
 
   this.push = (el) => {
-    const initEl = initial({elements: el}).elements
-    if (initEl === []) {
+    const elArr = elArray(el)
+    if (elArr === undefined) {
       return
     }
+    const initEl = initial({elements: elArr}).elements
+
     this.init.elements = this.init.elements.concat(initEl)
+
     event.arr = event.arr.concat(addInput({
       elements: initEl,
       toggle: this.init.toggle
@@ -117,6 +120,14 @@ function addInput(init, div) {
 function bind(e, t, c) {
   e.addEventListener(t, c)
   return {obj: e, e: t, fn: c}
+}
+
+function elArray(el) {
+  const setEl = {
+    '[object HTMLInputElement]': Array(el),
+    '[object NodeList]': el
+  }
+  return setEl[el.toString()]
 }
 
 function cea(t, a, atr, i) {
