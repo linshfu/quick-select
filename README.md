@@ -17,6 +17,8 @@
     }
 
     const s = QuickSelect.bind(set)
+
+    // default className=quickSelect
 ---
     s.update({
       setAmount: setAmount,
