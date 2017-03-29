@@ -48,6 +48,18 @@
       }
     };
 
+    this.push = function (el) {
+      var initEl = initial({ elements: el }).elements;
+      if (initEl === []) {
+        return;
+      }
+      _this.init.elements = _this.init.elements.concat(initEl);
+      event.arr = event.arr.concat(addInput({
+        elements: initEl,
+        toggle: _this.init.toggle
+      }, event.div));
+    };
+
     this.update = function (init) {
       var newInit = initial(init);
       for (var key in init) {
@@ -60,15 +72,17 @@
     return this;
   }
 
-  QuickSelect.bind = function (init) {
+  QuickSelect.init = function (init) {
     return new QuickSelect(init);
   };
+
+  QuickSelect.active = false;
 
   function initial(init) {
     return {
       elements: _lodash2.default.isObject(init.elements) ? _lodash2.default.filter(init.elements, function (n) {
         return _lodash2.default.isElement(n) && n.tagName === 'INPUT' && n.type === 'text';
-      }) : {},
+      }) : [],
       setAmount: _lodash2.default.isArray(init.setAmount) ? _lodash2.default.take(_lodash2.default.sortBy(_lodash2.default.filter(_lodash2.default.compact(_lodash2.default.map(init.setAmount, _lodash2.default.parseInt)), function (n) {
         return n >= 0 && n <= 1000000;
       })), 10) : [],
@@ -91,51 +105,25 @@
       var _ret = function () {
         var arr = [];
         var div = cea('div', document.body, { class: init.prefix + 'quickSelect' }, '');
-        var active = false;
-        var select = {};
 
         arr.push(bind(div, 'mouseover', function () {
-          active = true;
+          QuickSelect.active = true;
         }));
 
         arr.push(bind(div, 'mouseout', function () {
-          active = false;
+          QuickSelect.active = false;
         }));
+        arr = arr.concat(addInput(init, div));
 
-        var _loop = function _loop(obj) {
-          arr.push(bind(init.elements[obj], 'focus', function () {
-            if (init.toggle !== false) {
-              select = init.elements[obj];
-              div.style.display = 'block';
-              var i = init.elements[obj].getBoundingClientRect();
-              var d = div.getBoundingClientRect();
-              var s = { top: (i.top - d.height < 0 ? i.top + i.height : i.top - d.height) + 'px', left: i.left + i.width / 2 - d.width / 2 + 'px' };
-              for (var atr in s) {
-                div.style[atr] = s[atr];
-              }
-            }
-          }));
-
-          arr.push(bind(init.elements[obj], 'blur', function () {
-            if (!active) {
-              div.style.display = 'none';
-            }
-          }));
-        };
-
-        for (var obj in init.elements) {
-          _loop(obj);
-        }
-
-        var _loop2 = function _loop2(key) {
+        var _loop = function _loop(key) {
           bind(cea('a', div, '', init.lang(init.setAmount[key]).msg), 'click', function () {
-            select.value = init.setAmount[key];
+            addInput.select.value = init.setAmount[key];
             div.style.display = 'none';
           });
         };
 
         for (var key in init.setAmount) {
-          _loop2(key);
+          _loop(key);
         }
 
         bind(cea('a', div, '', init.lang('stop').stop), 'click', function () {
@@ -151,6 +139,36 @@
 
       if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
     }
+  }
+
+  function addInput(init, div) {
+    var arr = [];
+
+    var _loop2 = function _loop2(obj) {
+      arr.push(bind(init.elements[obj], 'focus', function () {
+        if (init.toggle !== false) {
+          addInput.select = init.elements[obj];
+          div.style.display = 'block';
+          var i = init.elements[obj].getBoundingClientRect();
+          var d = div.getBoundingClientRect();
+          var s = { top: (i.top - d.height < 0 ? i.top + i.height : i.top - d.height) + 'px', left: i.left + i.width / 2 - d.width / 2 + 'px' };
+          for (var atr in s) {
+            div.style[atr] = s[atr];
+          }
+        }
+      }));
+
+      arr.push(bind(init.elements[obj], 'blur', function () {
+        if (!QuickSelect.active) {
+          div.style.display = 'none';
+        }
+      }));
+    };
+
+    for (var obj in init.elements) {
+      _loop2(obj);
+    }
+    return arr;
   }
 
   function bind(e, t, c) {

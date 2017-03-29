@@ -1,12 +1,10 @@
-import QuickSelect from '../src/QuickSelect.js'
+import QuickSelect from '../src/QuickSelect-js.js'
 
 if (module.hot) {
   module.hot.accept()
 }
 
-// const elements = document.querySelectorAll('.quickSelectInput, .setSelectButton')
-// const setAmount = [5,10,30,50,100,300,1000,3000,5000]
-const setAmount1 = [999,20,300,4000,6000,7000,8000]
+const setAmount = [999,20,300,4000,6000,7000,8000]
 
 const lang = (amount) => {
   return {
@@ -15,8 +13,9 @@ const lang = (amount) => {
   }
 }
 
+window.add = document.querySelectorAll('.q1')
+
 const set = {
-  elements: document.querySelectorAll('.quickSelectInput, .setSelectButton'),
   setAmount: [5,150,30,50,100,300,1000,3000,5000],
   toggle: true,
   prefix: '',
@@ -24,9 +23,9 @@ const set = {
   notify: () => alert(123)
 }
 
-const s = QuickSelect.bind(set)
+const s = QuickSelect.init(set)
 
-window.v = {setAmount: setAmount1}
+window.v = {setAmount: setAmount}
 window.b = {toggle: true}
 window.s = s
 
