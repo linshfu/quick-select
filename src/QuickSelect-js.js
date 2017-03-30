@@ -103,12 +103,12 @@ function addInput(elements, init, div) {
         div.style.display = 'block'
         const i = elements[obj].getBoundingClientRect()
         const d = div.getBoundingClientRect()
-        const h = (document.body.scrollTop < init.headerHeight) ? init.headerHeight : 0
+        const h = (window.scrollY < init.headerHeight) ? init.headerHeight : 0
         const s = {
           top: `${
             (i.top - d.height < h)
-            ? i.top + document.body.scrollTop + i.height + 15
-            : i.top - d.height + document.body.scrollTop - 15
+            ? i.top + window.scrollY + i.height + 15
+            : i.top - d.height + window.scrollY - 15
           }px`,
           left: `${
             i.left + i.width / 2 - d.width /2
