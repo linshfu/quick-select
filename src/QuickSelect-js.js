@@ -107,13 +107,16 @@ function addInput(elements, init, div) {
         const s = {
           top: `${
             (i.top - d.height < h)
-            ? i.top + document.body.scrollTop + i.height
-            : i.top - d.height + document.body.scrollTop
+            ? i.top + document.body.scrollTop + i.height + 15
+            : i.top - d.height + document.body.scrollTop - 15
           }px`,
           left: `${
             i.left + i.width / 2 - d.width /2
           }px`
         }
+        div.className = (i.top - d.height < h)
+        ? `${init.prefix}quickSelect is-top`
+        : `${init.prefix}quickSelect`
         for(let atr in s){
           div.style[atr] = s[atr];
         }

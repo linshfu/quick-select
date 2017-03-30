@@ -157,9 +157,10 @@
           var d = div.getBoundingClientRect();
           var h = document.body.scrollTop < init.headerHeight ? init.headerHeight : 0;
           var s = {
-            top: (i.top - d.height < h ? i.top + document.body.scrollTop + i.height : i.top - d.height + document.body.scrollTop) + 'px',
+            top: (i.top - d.height < h ? i.top + document.body.scrollTop + i.height + 15 : i.top - d.height + document.body.scrollTop - 15) + 'px',
             left: i.left + i.width / 2 - d.width / 2 + 'px'
           };
+          div.className = i.top - d.height < h ? init.prefix + 'quickSelect is-top' : init.prefix + 'quickSelect';
           for (var atr in s) {
             div.style[atr] = s[atr];
           }
