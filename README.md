@@ -13,7 +13,8 @@
           msg: t(amount),
           stop: 'stop'
         }
-      }
+      },
+      headerHeight: 116
     }
 
     const s = QuickSelect.init(set)

@@ -98,7 +98,8 @@
       },
       notify: _lodash2.default.isFunction(init.notify) ? init.notify : function () {
         return alert('停用');
-      }
+      },
+      headerHeight: _lodash2.default.isNumber(init.headerHeight) ? init.headerHeight : 0
     };
   }
 
@@ -152,9 +153,12 @@
         if (init.toggle !== false) {
           addInput.select = elements[obj];
           div.style.display = 'block';
-          var i = elements[obj].getBoundingClientRect();
-          var d = div.getBoundingClientRect();
-          var s = { top: (i.top - d.height < 0 ? i.top + i.height : i.top - d.height) + 'px', left: i.left + i.width / 2 - d.width / 2 + 'px' };
+          var i = elements[obj];
+          var d = div;
+          var s = {
+            top: ((i.offsetTop - document.body.scrollTop - div.offsetHeight < (document.body.scrollTop > init.headerHeight) ? init.headerHeight : 0) ? i.offsetTop + i.offsetHeight : i.offsetTop - div.offsetHeight) + 'px',
+            left: i.offsetLeft + i.offsetWidth / 2 - div.offsetWidth / 2 + 'px'
+          };
           for (var atr in s) {
             div.style[atr] = s[atr];
           }

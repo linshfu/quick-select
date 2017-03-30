@@ -56,7 +56,8 @@ function initial(init) {
         stop: '停用'
       }
     },
-    notify: (_.isFunction(init.notify)) ? init.notify : () => alert('停用')
+    notify: (_.isFunction(init.notify)) ? init.notify : () => alert('停用'),
+    headerHeight: (_.isNumber(init.headerHeight)) ? init.headerHeight : 0,
   }
 }
 
@@ -100,9 +101,18 @@ function addInput(elements, init, div) {
       if (init.toggle !== false) {
         addInput.select = elements[obj]
         div.style.display = 'block'
-        const i = elements[obj].getBoundingClientRect()
-        const d = div.getBoundingClientRect()
-        const s = { top: `${(i.top - d.height < 0) ? i.top + i.height : i.top - d.height}px`, left: `${i.left + i.width / 2 - d.width /2}px`}
+        const i = elements[obj]
+        const d = div
+        const s = {
+          top: `${
+            (i.offsetTop - document.body.scrollTop - div.offsetHeight < (document.body.scrollTop > init.headerHeight) ? init.headerHeight : 0)
+            ? i.offsetTop + i.offsetHeight
+            : i.offsetTop - div.offsetHeight
+          }px`,
+          left: `${
+            i.offsetLeft + i.offsetWidth / 2 - div.offsetWidth /2
+          }px`
+        }
         for(let atr in s){
           div.style[atr] = s[atr];
         }

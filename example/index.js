@@ -14,8 +14,7 @@ const lang = (amount) => {
 }
 
 
-window.add = document.querySelectorAll('.q1')
-window.add1 = document.querySelectorAll('.q2')
+window.add = document.querySelectorAll('.quickSelectInput')
 
 const set = {
   elements: add,
@@ -23,7 +22,8 @@ const set = {
   toggle: true,
   prefix: '',
   lang: lang,
-  notify: () => alert(123)
+  notify: () => alert(123),
+  headerHeight: 116
 }
 
 const s = QuickSelect.init(set)
