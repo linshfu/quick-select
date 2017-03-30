@@ -153,11 +153,12 @@
         if (init.toggle !== false) {
           addInput.select = elements[obj];
           div.style.display = 'block';
-          var i = elements[obj];
-          var d = div;
+          var i = elements[obj].getBoundingClientRect();
+          var d = div.getBoundingClientRect();
+          var h = document.body.scrollTop < init.headerHeight ? init.headerHeight : 0;
           var s = {
-            top: ((i.offsetTop - document.body.scrollTop - div.offsetHeight < (document.body.scrollTop > init.headerHeight) ? init.headerHeight : 0) ? i.offsetTop + i.offsetHeight : i.offsetTop - div.offsetHeight) + 'px',
-            left: i.offsetLeft + i.offsetWidth / 2 - div.offsetWidth / 2 + 'px'
+            top: (i.top - d.height < h ? i.top + document.body.scrollTop + i.height : i.top - d.height + document.body.scrollTop) + 'px',
+            left: i.left + i.width / 2 - d.width / 2 + 'px'
           };
           for (var atr in s) {
             div.style[atr] = s[atr];
