@@ -1,8 +1,8 @@
 {
   "name": "quick-select",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "quick-select",
-  "main": "dist/quickselect.js",
+  "main": "dist/quickselect.min.js",
   "scripts": {
     "build:babel": "npm run clear && npm run build:babel:umd && npm run build:babel:min",
     "build:babel:umd": "babel --no-babelrc src/QuickSelect-js.js -o ./dist/quickselect.js --presets=es2015,stage-0 --plugins=add-module-exports,transform-es2015-modules-umd",

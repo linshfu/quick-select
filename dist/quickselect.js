@@ -122,6 +122,9 @@
         var _loop = function _loop(key) {
           bind(cea('a', div, '', init.lang(init.setAmount[key]).msg), 'click', function () {
             addInput.select.value = init.setAmount[key];
+            if (addInput.select.onchange !== null) {
+              addInput.select.onchange();
+            }
             div.style.display = 'none';
           });
         };

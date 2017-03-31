@@ -13,7 +13,6 @@ const lang = (amount) => {
   }
 }
 
-
 window.add = document.querySelectorAll('.quickSelectInput')
 
 const set = {

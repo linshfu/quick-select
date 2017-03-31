@@ -79,6 +79,9 @@ function handler(init) {
     for (let key in init.setAmount) {
       bind(cea('a', div, '', init.lang(init.setAmount[key]).msg), 'click', () => {
         addInput.select.value = init.setAmount[key]
+        if (addInput.select.onchange !== null) {
+          addInput.select.onchange()
+        }
         div.style.display = 'none'
       })
     }
