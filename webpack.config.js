@@ -1,34 +1,27 @@
 const webpack = require('webpack')
+const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const env = process.env.NODE_ENV
 
 const config = {
+  entry: [
+    path.resolve(__dirname, 'src/QuickSelect-js.js'),
+  ],
   output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'quickselect.js',
     library: 'QuickSelect',
     libraryTarget: 'umd'
   },
   module: {
-    loaders: [
-      { test: /\.pug$/, loader: "pug-loader" },
-      { test: /\.js$/, loaders: ['babel'], exclude: /node_modules/ },
-      { test: /\.vue$/, loader: 'vue-loader'}
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      }
     ]
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: 'example/index.pug'
-    }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(env)
-    })
-  ],
-  resolve: {
-    alias: {
-      vue: 'vue/dist/vue.js'
-    }
   }
 }
 

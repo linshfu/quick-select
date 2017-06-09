@@ -42,10 +42,12 @@
     var event = handler(this.init);
 
     this.unbind = function () {
-      for (var item in event.arr) {
-        event.arr[item].obj.removeEventListener(event.arr[item].e, event.arr[item].fn);
+      if (event !== undefined) {
+        for (var item in event.arr) {
+          event.arr[item].obj.removeEventListener(event.arr[item].e, event.arr[item].fn);
+        }
+        event.div.remove();
       }
-      event.div.remove();
     };
 
     this.push = function (el) {
@@ -57,7 +59,9 @@
 
       _this.init.elements = _this.init.elements.concat(initEl);
 
-      event.arr = event.arr.concat(addInput(initEl, _this.init, event.div));
+      if (event !== undefined) {
+        event.arr = event.arr.concat(addInput(initEl, _this.init, event.div));
+      }
     };
 
     this.update = function (init) {
@@ -163,7 +167,7 @@
             top: (i.top - d.height < h ? i.top + window.scrollY + i.height + 15 : i.top - d.height + window.scrollY - 15) + 'px',
             left: i.left + i.width / 2 - d.width / 2 + 'px'
           };
-          div.className = i.top - d.height < h ? init.prefix + 'quickSelect is-top' : init.prefix + 'quickSelect';
+          div.className = i.top - d.height < h ? init.prefix + 'quickSelect ' + init.prefix + 'is-top' : init.prefix + 'quickSelect';
           for (var atr in s) {
             div.style[atr] = s[atr];
           }

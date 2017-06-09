@@ -6,10 +6,12 @@ export default function QuickSelect(init = {}) {
   let event = handler(this.init)
 
   this.unbind = () => {
-    for (let item in event.arr) {
-      event.arr[item].obj.removeEventListener(event.arr[item].e, event.arr[item].fn)
+    if (event !== undefined) {
+      for (let item in event.arr) {
+        event.arr[item].obj.removeEventListener(event.arr[item].e, event.arr[item].fn)
+      }
+      event.div.remove()
     }
-    event.div.remove()
   }
 
   this.push = (el) => {
@@ -21,7 +23,9 @@ export default function QuickSelect(init = {}) {
 
     this.init.elements = this.init.elements.concat(initEl)
 
-    event.arr = event.arr.concat(addInput(initEl, this.init, event.div))
+    if (event !== undefined) {
+      event.arr = event.arr.concat(addInput(initEl, this.init, event.div))
+    }
   }
 
   this.update = (init) => {
@@ -118,7 +122,7 @@ function addInput(elements, init, div) {
           }px`
         }
         div.className = (i.top - d.height < h)
-        ? `${init.prefix}quickSelect is-top`
+        ? `${init.prefix}quickSelect ${init.prefix}is-top`
         : `${init.prefix}quickSelect`
         for(let atr in s){
           div.style[atr] = s[atr];
