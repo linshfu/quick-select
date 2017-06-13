@@ -14,6 +14,28 @@ const lang = (amount) => {
 }
 
 window.add = document.querySelectorAll('.quickSelectInput')
+const testRemove = () => {
+  for (const item of add) {
+    item.remove()
+  }
+}
+
+function cea(t, a, atr, i) {
+  const el = document.createElement(t)
+
+  if(atr !== {}) {
+    for(let key in atr) {
+      el.setAttribute(key, atr[key])
+    }
+  }
+  if (i !== '') {
+      el.innerText = i
+  }
+  if (a !== '') {
+    a.appendChild(el)
+  }
+  return el
+}
 
 const set = {
   elements: add,
@@ -27,6 +49,7 @@ const set = {
 
 const s = QuickSelect.init(set)
 
+window.testRemove = testRemove
 window.v = {setAmount: setAmount}
 window.b = {toggle: true}
 window.s = s

@@ -19,6 +19,8 @@ export default function QuickSelect(init = {}) {
     if (elArr === undefined) {
       return
     }
+    this.init.elements = checkDom(this.init.elements)
+
     const initEl = initial({elements: elArr}).elements
 
     this.init.elements = this.init.elements.concat(initEl)
@@ -29,6 +31,8 @@ export default function QuickSelect(init = {}) {
   }
 
   this.update = (init) => {
+    this.init.elements = checkDom(this.init.elements)
+
     const newInit = initial(init)
 
     for (var key in init) {
@@ -151,6 +155,12 @@ function elArray(el) {
   }
 
   return setEl[el.toString()]
+}
+
+function checkDom(elements) {
+  return elements.filter((item) => {
+    return document.body.contains(item)
+  })
 }
 
 function cea(t, a, atr, i) {

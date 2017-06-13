@@ -55,6 +55,8 @@
       if (elArr === undefined) {
         return;
       }
+      _this.init.elements = checkDom(_this.init.elements);
+
       var initEl = initial({ elements: elArr }).elements;
 
       _this.init.elements = _this.init.elements.concat(initEl);
@@ -65,6 +67,8 @@
     };
 
     this.update = function (init) {
+      _this.init.elements = checkDom(_this.init.elements);
+
       var newInit = initial(init);
 
       for (var key in init) {
@@ -199,6 +203,12 @@
     };
 
     return setEl[el.toString()];
+  }
+
+  function checkDom(elements) {
+    return elements.filter(function (item) {
+      return document.body.contains(item);
+    });
   }
 
   function cea(t, a, atr, i) {
