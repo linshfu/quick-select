@@ -1,181 +1,263 @@
-import _ from 'lodash'
+import {
+  isFunction,
+  isObject,
+  isElement,
+  isArray,
+  isEmpty,
+  isBoolean,
+  isNumber,
+  take,
+  sortBy,
+  filter,
+  includes
+} from 'lodash'
 
-export default function QuickSelect(init = {}) {
-  this.init = initial(init)
+export default function QuickSelect(options = {}) {
+  this.setHeaderHeight = isNumber(options.setHeaderHeight) ? options.setHeaderHeight : 0
+  this.setItemsFormat = isFunction(options.setItemsFormat) ? options.setItemsFormat : null
+  this.setClass = isFunction(options.setClass) ? options.setClass : className => className
+  this.setLang = isFunction(options.setLang) ? options.setLang : item => {
+    return { items: `下注 ${item} 元`, disable: '停用'}
+  }
 
-  let event = handler(this.init)
+  this.beforeShow = isFunction(options.beforeShow) ? options.beforeShow : null
+  this.afterDisable = isFunction(options.afterDisable) ? options.afterDisable : null
 
-  this.unbind = () => {
-    if (event !== undefined) {
-      for (let item in event.arr) {
-        event.arr[item].obj.removeEventListener(event.arr[item].e, event.arr[item].fn)
+  this.isBlur = false
+  this.activeElement = null
+  this.event = {
+    el: isEl(options.el),
+    div: [],
+    body: []
+  }
+
+  Array.from(document.querySelectorAll(`.${this.setClass('quickSelect')}`)).map((item) => {
+    item.delete()
+  })
+
+  this.div = initial.bind(this)(options.items, options.disable) || null
+
+  bindEl.bind(this)()
+
+  this.event.body.push(
+    addAndRemove(document, { click: clickOut.bind(this) })
+  )
+
+  this.bind = (el = {}) => {
+    this.event.el = checkAliveDom(this.event.el)
+
+    const elements = isEl(el)
+    if (elements) {
+      for (const item of elements) {
+        if (this.event.el.indexOf(item) === -1) {
+          this.event.el = this.event.el.concat(item)
+          bindEl.bind(this)([item])
+        }
       }
-      event.div.remove()
     }
   }
 
-  this.push = (el) => {
-    const elArr = elArray(el)
-    if (elArr === undefined) {
-      return
-    }
-    this.init.elements = checkDom(this.init.elements)
+  this.updateDate = (items, disable) => {
+    this.event.el = checkAliveDom(this.event.el)
 
-    const initEl = initial({elements: elArr}).elements
-
-    this.init.elements = this.init.elements.concat(initEl)
-
-    if (event !== undefined) {
-      event.arr = event.arr.concat(addInput(initEl, this.init, event.div))
-    }
+    this.div = initial.bind(this)(items, disable)
   }
 
-  this.update = (init) => {
-    this.init.elements = checkDom(this.init.elements)
-
-    const newInit = initial(init)
-
-    for (var key in init) {
-      this.init[key] = newInit[key]
-    }
-
-    this.unbind()
-    event = handler(this.init)
+  this.remove = () => {
+    unbind.bind(this)()
+    this.div.remove()
   }
 
   return this
 }
 
-QuickSelect.init = function (init) {
-  return new QuickSelect(init)
+QuickSelect.init = (options = {}) => {
+  return new QuickSelect(options)
 }
 
-QuickSelect.active = false
-
-function initial(init) {
-  return {
-    elements: (_.isObject(init.elements)) ? _.filter(init.elements, (n) => _.isElement(n) && n.tagName === 'INPUT' && n.type === 'text') : [],
-    setAmount: (_.isArray(init.setAmount)) ? _.take(_.sortBy(_.filter(_.compact(_.map(init.setAmount, _.parseInt)), (n) => n >= 0 && n <= 1000000)),10) : [],
-    toggle: (_.isBoolean(init.toggle)) ? init.toggle : false,
-    prefix: (_.isString(init.prefix) && init.prefix !== '') ? `${init.prefix}-` : '',
-    lang: (_.isFunction(init.lang)) ? init.lang : (amount) => {
-      return {
-        msg: `下注 ${amount} 元`,
-        stop: '停用'
-      }
-    },
-    notify: (_.isFunction(init.notify)) ? init.notify : () => alert('停用'),
-    headerHeight: (_.isNumber(init.headerHeight)) ? init.headerHeight : 0,
-  }
-}
-
-function handler(init) {
-  if (init.toggle !== false) {
-    let arr = []
-    const div = cea('div', document.body, {class: `${init.prefix}quickSelect`}, '')
-
-    arr.push(bind(div, 'mouseover', () => {
-      QuickSelect.active = true
-    }))
-
-    arr.push(bind(div, 'mouseout', () => {
-      QuickSelect.active = false
-    }))
-
-    arr = arr.concat(addInput(init.elements, init, div))
-
-    for (let key in init.setAmount) {
-      bind(cea('a', div, '', init.lang(init.setAmount[key]).msg), 'click', () => {
-        addInput.select.value = init.setAmount[key]
-        if (addInput.select.onchange !== null) {
-          addInput.select.onchange()
+function createDiv () {
+  const div = create({ append: document.body, class: this.setClass('quickSelect') })
+  this.event.div.push(
+    addAndRemove(div, { click: (e) => { e.stopPropagation() } })
+  )
+  for (const item of this.items) {
+    this.event.div.push(
+      addAndRemove(create({ tag: 'a', append: div, inner: this.setLang(item).items }), {
+        click: (e) => {
+          this.activeElement.value = item
+          if (this.activeElement.onchange) {
+            this.activeElement.onchange()
+          }
+          hide.bind(this)()
         }
-        div.style.display = 'none'
       })
-    }
-
-    bind(cea('a', div, '', init.lang('stop').stop), 'click', () => {
-      div.style.display = 'none'
-      init.toggle = false
-      init.notify()
+    )
+  }
+  this.event.div.push(
+    addAndRemove(create({ tag: 'a', append: div, inner: this.setLang().disable }), {
+      click: (e) => {
+        this.disable = true
+        hide.bind(this)()
+        this.afterDisable ? this.afterDisable() : alert(this.setLang().disable)
+      }
     })
-
-    return {div: div, arr: arr}
-  }
+  )
+  div.delete = () => this.remove()
+  return div
 }
 
-function addInput(elements, init, div) {
-  const arr = []
-
-  for (let obj in elements) {
-    arr.push(bind(elements[obj], 'focus', () => {
-      if (init.toggle !== false) {
-        addInput.select = elements[obj]
-        div.style.display = 'block'
-        const i = elements[obj].getBoundingClientRect()
-        const d = div.getBoundingClientRect()
-        const h = (window.scrollY < init.headerHeight) ? init.headerHeight : 0
-        const s = {
-          top: `${
-            (i.top - d.height < h)
-            ? i.top + window.scrollY + i.height + 15
-            : i.top - d.height + window.scrollY - 15
-          }px`,
-          left: `${
-            i.left + i.width / 2 - d.width /2
-          }px`
+function bindEl (elements = this.event.el) {
+  for (const el of elements) {
+    addAndRemove(el, {
+      focus: () => {
+        if (!this.disable) {
+          this.activeElement = el
+          if (this.beforeShow) {
+            runPromise(this.beforeShow).then(() => {
+              show.bind(this)(el)
+            })
+          } else {
+            show.bind(this)(el)
+          }
         }
-        div.className = (i.top - d.height < h)
-        ? `${init.prefix}quickSelect ${init.prefix}is-top`
-        : `${init.prefix}quickSelect`
-        for(let atr in s){
-          div.style[atr] = s[atr];
+      },
+      keydown: (e) => {
+        if (!this.disable && e.keyCode === 9) {
+          hide.bind(this)()
+        }
+      },
+      blur: (e) => {
+        if (!this.disable && (e.target.disabled || e.target)) {
+          hide.bind(this)()
         }
       }
-    }))
-
-    arr.push(bind(elements[obj], 'blur', () => {
-      if (!QuickSelect.active) {
-        div.style.display = 'none'
-      }
-    }))
+    })
   }
-  return arr
 }
 
-function bind(e, t, c) {
-  e.addEventListener(t, c)
-  return {obj: e, e: t, fn: c}
-}
-
-function elArray(el) {
-  const setEl = {
-    '[object HTMLInputElement]': Array(el),
-    '[object NodeList]': el
+function show (el) {
+  if (!this.disable) {
+    this.div.classList.add(this.setClass('is-active'))
+    const i = el.getBoundingClientRect()
+    const d = this.div.getBoundingClientRect()
+    const pos = {
+      top: `${
+        (i.top - d.height < this.setHeaderHeight)
+        ? i.top + window.scrollY + i.height + 15
+        : i.top - d.height + window.scrollY - 15
+      }px`,
+      left: `${
+        i.left + i.width / 2 - d.width /2
+      }px`
+    }
+    if (i.top - d.height < this.setHeaderHeight) {
+      this.div.classList.add(this.setClass('is-top'))
+    } else {
+      this.div.classList.remove(this.setClass('is-top'))
+    }
+    for (let atr in pos) {
+      this.div.style[atr] = pos[atr]
+    }
   }
-
-  return setEl[el.toString()]
 }
 
-function checkDom(elements) {
+function hide () {
+  this.div.classList.remove(this.setClass('is-active'))
+}
+
+function clickOut (e) {
+  if (!this.disable && !includes(this.event.el, e.target)) {
+    hide.bind(this)()
+  }
+}
+
+function runPromise (func) {
+  return new Promise((resolve) => {
+    resolve(func())
+  })
+}
+
+function checkAliveDom(elements) {
   return elements.filter((item) => {
+    if (!document.body.contains(item)) {
+      item.destroy()
+    }
     return document.body.contains(item)
   })
 }
 
-function cea(t, a, atr, i) {
-  const el = document.createElement(t)
+function format (items) {
+  return this.setItemsFormat !== null
+  ? this.setItemsFormat(items)
+  : take(sortBy(filter(items, n => isNumber(n) && n > 0 && n <= 1000000 && n % 1 === 0)), 10)
+}
 
-  if(atr !== {}) {
-    for(let key in atr) {
-      el.setAttribute(key, atr[key])
+function initial (items = this.items, disable = this.disable) {
+  if (this.div) this.div.remove()
+  this.items = isArray(items) ? format.bind(this)(items) : [10, 25, 50, 100],
+  this.disable = isBoolean(disable) ? disable : true
+  const div = createDiv.bind(this)()
+
+  return div
+}
+
+function addAndRemove (el, option) {
+  for (const key in option) {
+    el.addEventListener(key, option[key])
+  }
+  el.destroy = () => {
+    for (const key in option) {
+      el.removeEventListener(key, option[key])
     }
   }
-  if (i !== '') {
-      el.innerText = i
+  return el
+}
+
+function unbind (items = null) {
+  if (items) {
+    for (const item of this.event[items]) {
+      item.destroy()
+    }
+    this.event[items] = []
+  } else {
+    for (const items in this.event) {
+      for (const item of this.event[items]) {
+        item.destroy()
+      }
+      this.event[items] = []
+    }
   }
-  if (a !== '') {
-    a.appendChild(el)
+}
+
+function isEl (el) {
+  if (isElement(el)) {
+    return [el]
   }
+  if (isEmpty(el)) {
+    return []
+  }
+  if (isObject(el)) {
+    for (let i of el) {
+      if (isElement(i) === false) {
+        return []
+      }
+    }
+    return Array.from(el)
+  } else {
+    return []
+  }
+}
+
+function create (options = {}) {
+  const set = {
+    tag: options.tag || 'div',
+    inner: options.inner || null,
+    class: options.class || null,
+    append: options.append || null
+  }
+  const el = document.createElement(set.tag)
+  if (set.inner) el.innerText = set.inner
+  if (set.class) el.setAttribute('class', set.class)
+  if (set.append) set.append.appendChild(el)
   return el
 }

@@ -1,31 +1,40 @@
 # quick-select
-    // default className=quickSelect
+    import QuickSelect from 'quick-select'
 
-    const setAmount = [5,10,30,50,100,300,1000,3000,5000]
+    const qs = QuickSelect.init({
+      el: document.querySelectorAll('.Input'), // default: []
+      items: [1,2,3,4,5],                      // default: [10, 25, 50, 100]
+      disable: false,                          // default: true
 
-    const elements = document.querySelectorAll('.Input')
+      beforeShow () {                          // default: null
+        alert('beforeShow')
+      },
 
-    const set = {
-      elements: elements,
-      setAmount: setAmount,
-      toggle: true,
-      prefix: '',         // className prefix-quickSelect
-      lang: (amount) => {
+      afterDisable () {                        // default: null
+        alert(‘Disable’)
+      },
+
+      setItemsFormat (items) {                 // default: 取10組 Number 1000000 > n > 0
+        return items
+      },
+
+      setClass (className) {                   // default: quickSelect
+        return `prefix-${className}`
+      },
+
+      setLang (item) {                         // default: { items: `下注 ${item} 元`, disable: '停用'}
         return {
-          msg: t(amount),
-          stop: 'stop'
+          items: `bet $${item}`,
+          disable: 'disable'
         }
       },
-      headerHeight: 116   // px
-    }
-
-    const s = QuickSelect.init(set)
----
-    s.push(el)
----
-    s.unbind()
----
-    s.update({
-      setAmount: setAmount,
-      toggle: true
+      
+      setHeaderHeight: 116,                    // default: 0
     })
+
+    qs.addInput(document.querySelectorAll('.Input'))
+
+    qs.updateDate([10, 25, 50, 100], true)
+
+    qs.remove()
+
