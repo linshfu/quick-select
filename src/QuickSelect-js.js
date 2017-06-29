@@ -22,8 +22,8 @@ export default function QuickSelect(options = {}) {
 
   this.beforeShow = isFunction(options.beforeShow) ? options.beforeShow : null
   this.afterDisable = isFunction(options.afterDisable) ? options.afterDisable : null
+  this.willSetValue = isFunction(options.willSetValue) ? options.willSetValue : null
 
-  this.isBlur = false
   this.activeElement = null
   this.event = {
     el: isEl(options.el),
@@ -83,10 +83,17 @@ function createDiv () {
   for (const item of this.items) {
     this.event.div.push(
       addAndRemove(create({ tag: 'a', append: div, inner: this.setLang(item).items }), {
+        mousedown: (e) => {
+          e.preventDefault()
+        },
         click: (e) => {
-          this.activeElement.value = item
-          if (this.activeElement.onchange) {
-            this.activeElement.onchange()
+          if (this.willSetValue) {
+            this.willSetValue(item)
+          } else {
+            this.activeElement.value = item
+            if (this.activeElement.onchange) {
+              this.activeElement.onchange()
+            }
           }
           hide.bind(this)()
         }
@@ -95,6 +102,9 @@ function createDiv () {
   }
   this.event.div.push(
     addAndRemove(create({ tag: 'a', append: div, inner: this.setLang().disable }), {
+      mousedown: (e) => {
+        e.preventDefault()
+      },
       click: (e) => {
         this.disable = true
         hide.bind(this)()

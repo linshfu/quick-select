@@ -14,6 +14,10 @@
         alert(‘Disable’)
       },
 
+      willSetValue (value) {                   // default: null
+        console.log(value)
+      }
+
       setItemsFormat (items) {                 // default: 取10組 Number 1000000 > n > 0
         return items
       },
