@@ -32,7 +32,7 @@
       setHeaderHeight: 116,                    // default: 0
     })
 
-    qs.addInput(document.querySelectorAll('.Input'))
+    qs.bind(document.querySelectorAll('.Input'))
 
     qs.updateDate([10, 25, 50, 100], true)
 
