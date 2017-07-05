@@ -57,7 +57,7 @@ export default function QuickSelect(options = {}) {
     }
   }
 
-  this.updateDate = (items, disable) => {
+  this.updateData = (items, disable) => {
     this.event.el = checkAliveDom(this.event.el)
 
     this.div = initial.bind(this)(items, disable)
@@ -129,6 +129,12 @@ function bindEl (elements = this.event.el) {
           } else {
             show.bind(this)(el)
           }
+        }
+      },
+      mousedown: (e) => {
+        if (!this.disable) {
+          e.target.blur()
+          e.target.focus()
         }
       },
       keydown: (e) => {

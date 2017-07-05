@@ -38,7 +38,7 @@
 
     qs.bind(document.querySelectorAll('.Input'))
 
-    qs.updateDate([10, 25, 50, 100], true)
+    qs.updateData([10, 25, 50, 100], true)
 
     qs.remove()
 
