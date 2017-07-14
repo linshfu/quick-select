@@ -156,11 +156,12 @@ function show (el) {
     this.div.classList.add(this.setClass('is-active'))
     const i = el.getBoundingClientRect()
     const d = this.div.getBoundingClientRect()
+    const scrolly = window.scrollY || window.pageYOffset
     const pos = {
       top: `${
         (i.top - d.height < this.setHeaderHeight)
-        ? i.top + window.scrollY + i.height + 15
-        : i.top - d.height + window.scrollY - 15
+        ? i.top + scrolly + i.height + 15
+        : i.top - d.height + scrolly - 15
       }px`,
       left: `${
         i.left + i.width / 2 - d.width /2
