@@ -120,13 +120,16 @@ function bindEl (elements = this.event.el) {
   for (const el of elements) {
     addAndRemove(el, {
       focus: () => {
-        if (!this.disable) {
-          this.activeElement = el
-          if (this.beforeShow) {
-            runPromise(this.beforeShow).then(() => {
+        if (this.beforeShow) {
+          runPromise(this.beforeShow).then(() => {
+            if (!this.disable) {
+              this.activeElement = el
               show.bind(this)(el)
-            })
-          } else {
+            }
+          })
+        } else {
+          if (!this.disable) {
+            this.activeElement = el
             show.bind(this)(el)
           }
         }

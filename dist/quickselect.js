@@ -33,8 +33,8 @@
 
     this.beforeShow = (0, _lodash.isFunction)(options.beforeShow) ? options.beforeShow : null;
     this.afterDisable = (0, _lodash.isFunction)(options.afterDisable) ? options.afterDisable : null;
+    this.willSetValue = (0, _lodash.isFunction)(options.willSetValue) ? options.willSetValue : null;
 
-    this.isBlur = false;
     this.activeElement = null;
     this.event = {
       el: isEl(options.el),
@@ -89,7 +89,7 @@
       }
     };
 
-    this.updateDate = function (items, disable) {
+    this.updateData = function (items, disable) {
       _this.event.el = checkAliveDom(_this.event.el);
 
       _this.div = initial.bind(_this)(items, disable);
@@ -125,10 +125,17 @@
         var item = _step2.value;
 
         _this2.event.div.push(addAndRemove(create({ tag: 'a', append: div, inner: _this2.setLang(item).items }), {
+          mousedown: function mousedown(e) {
+            e.preventDefault();
+          },
           click: function click(e) {
-            _this2.activeElement.value = item;
-            if (_this2.activeElement.onchange) {
-              _this2.activeElement.onchange();
+            if (_this2.willSetValue) {
+              _this2.willSetValue(item);
+            } else {
+              _this2.activeElement.value = item;
+              if (_this2.activeElement.onchange) {
+                _this2.activeElement.onchange();
+              }
             }
             hide.bind(_this2)();
           }
@@ -154,6 +161,9 @@
     }
 
     this.event.div.push(addAndRemove(create({ tag: 'a', append: div, inner: this.setLang().disable }), {
+      mousedown: function mousedown(e) {
+        e.preventDefault();
+      },
       click: function click(e) {
         _this2.disable = true;
         hide.bind(_this2)();
@@ -180,15 +190,24 @@
 
         addAndRemove(el, {
           focus: function focus() {
-            if (!_this3.disable) {
-              _this3.activeElement = el;
-              if (_this3.beforeShow) {
-                runPromise(_this3.beforeShow).then(function () {
+            if (_this3.beforeShow) {
+              runPromise(_this3.beforeShow).then(function () {
+                if (!_this3.disable) {
+                  _this3.activeElement = el;
                   show.bind(_this3)(el);
-                });
-              } else {
+                }
+              });
+            } else {
+              if (!_this3.disable) {
+                _this3.activeElement = el;
                 show.bind(_this3)(el);
               }
+            }
+          },
+          mousedown: function mousedown(e) {
+            if (!_this3.disable) {
+              e.target.blur();
+              e.target.focus();
             }
           },
           keydown: function keydown(e) {
@@ -228,8 +247,9 @@
       this.div.classList.add(this.setClass('is-active'));
       var i = el.getBoundingClientRect();
       var d = this.div.getBoundingClientRect();
+      var scrolly = window.scrollY || window.pageYOffset;
       var pos = {
-        top: (i.top - d.height < this.setHeaderHeight ? i.top + window.scrollY + i.height + 15 : i.top - d.height + window.scrollY - 15) + 'px',
+        top: (i.top - d.height < this.setHeaderHeight ? i.top + scrolly + i.height + 15 : i.top - d.height + scrolly - 15) + 'px',
         left: i.left + i.width / 2 - d.width / 2 + 'px'
       };
       if (i.top - d.height < this.setHeaderHeight) {
