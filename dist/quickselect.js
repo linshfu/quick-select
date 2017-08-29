@@ -124,7 +124,7 @@
       var _loop = function _loop() {
         var item = _step2.value;
 
-        _this2.event.div.push(addAndRemove(create({ tag: 'a', append: div, inner: _this2.setLang(item).items }), {
+        _this2.event.div.push(addAndRemove(create({ tag: 'a', append: div, inner: _this2.setLang(item).items, class: _this2.setClass('quickSelect') + '-item' }), {
           mousedown: function mousedown(e) {
             e.preventDefault();
           },
@@ -160,7 +160,7 @@
       }
     }
 
-    this.event.div.push(addAndRemove(create({ tag: 'a', append: div, inner: this.setLang().disable }), {
+    this.event.div.push(addAndRemove(create({ tag: 'a', append: div, inner: this.setLang().disable, class: this.setClass('quickSelect') + '-item' }), {
       mousedown: function mousedown(e) {
         e.preventDefault();
       },

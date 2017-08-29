@@ -82,7 +82,7 @@ function createDiv () {
   )
   for (const item of this.items) {
     this.event.div.push(
-      addAndRemove(create({ tag: 'a', append: div, inner: this.setLang(item).items }), {
+      addAndRemove(create({ tag: 'a', append: div, inner: this.setLang(item).items, class: `${this.setClass('quickSelect')}-item` }), {
         mousedown: (e) => {
           e.preventDefault()
         },
@@ -101,7 +101,7 @@ function createDiv () {
     )
   }
   this.event.div.push(
-    addAndRemove(create({ tag: 'a', append: div, inner: this.setLang().disable }), {
+    addAndRemove(create({ tag: 'a', append: div, inner: this.setLang().disable, class: `${this.setClass('quickSelect')}-item` }), {
       mousedown: (e) => {
         e.preventDefault()
       },
