@@ -65,7 +65,7 @@ export default function QuickSelect(options = {}) {
 
   this.remove = () => {
     unbind.bind(this)()
-    this.div.remove()
+    this.div.parentNode.removeChild(this.div)
   }
 
   return this
@@ -213,7 +213,7 @@ function format (items) {
 }
 
 function initial (items = this.items, disable = this.disable) {
-  if (this.div) this.div.remove()
+  if (this.div) this.div.parentNode.removeChild(this.div)
   this.items = isArray(items) ? format.bind(this)(items) : [10, 25, 50, 100],
   this.disable = isBoolean(disable) ? disable : true
   const div = createDiv.bind(this)()
