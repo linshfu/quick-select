@@ -141,7 +141,7 @@ function bindEl (elements = this.event.el) {
         }
       },
       keydown: (e) => {
-        if (!this.disable && e.keyCode === 9) {
+        if (!this.disable) {
           hide.bind(this)()
         }
       },
