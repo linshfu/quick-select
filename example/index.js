@@ -66,8 +66,9 @@ window.testDisable = testDisable
 
 const options = {
   el: elements,
-  items: [1,2,3,'4',5,'',null,1.3,-13,()=>{},'中文'],
+  items: [123,223,323,423,523,623,723,823,923,435],
   disable: false,
+  setHeaderHeight: 116
 }
 
 const s = QuickSelect.init(options)

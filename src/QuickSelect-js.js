@@ -162,7 +162,7 @@ function show (el) {
     const scrolly = window.scrollY || window.pageYOffset
     const pos = {
       top: `${
-        (i.top - d.height < this.setHeaderHeight)
+        (i.top - d.height < this.setHeaderHeight + 15)
         ? i.top + scrolly + i.height + 15
         : i.top - d.height + scrolly - 15
       }px`,
@@ -170,7 +170,7 @@ function show (el) {
         i.left + i.width / 2 - d.width /2
       }px`
     }
-    if (i.top - d.height < this.setHeaderHeight) {
+    if (i.top - d.height < this.setHeaderHeight + 15) {
       this.div.classList.add(this.setClass('is-top'))
     } else {
       this.div.classList.remove(this.setClass('is-top'))
