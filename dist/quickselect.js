@@ -97,7 +97,7 @@
 
     this.remove = function () {
       unbind.bind(_this)();
-      _this.div.remove();
+      _this.div.parentNode.removeChild(_this.div);
     };
 
     return this;
@@ -211,7 +211,7 @@
             }
           },
           keydown: function keydown(e) {
-            if (!_this3.disable && e.keyCode === 9) {
+            if (!_this3.disable) {
               hide.bind(_this3)();
             }
           },
@@ -249,10 +249,10 @@
       var d = this.div.getBoundingClientRect();
       var scrolly = window.scrollY || window.pageYOffset;
       var pos = {
-        top: (i.top - d.height < this.setHeaderHeight ? i.top + scrolly + i.height + 15 : i.top - d.height + scrolly - 15) + 'px',
+        top: (i.top - d.height < this.setHeaderHeight + 15 ? i.top + scrolly + i.height + 15 : i.top - d.height + scrolly - 15) + 'px',
         left: i.left + i.width / 2 - d.width / 2 + 'px'
       };
-      if (i.top - d.height < this.setHeaderHeight) {
+      if (i.top - d.height < this.setHeaderHeight + 15) {
         this.div.classList.add(this.setClass('is-top'));
       } else {
         this.div.classList.remove(this.setClass('is-top'));
@@ -298,7 +298,7 @@
     var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.items;
     var disable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.disable;
 
-    if (this.div) this.div.remove();
+    if (this.div) this.div.parentNode.removeChild(this.div);
     this.items = (0, _lodash.isArray)(items) ? format.bind(this)(items) : [10, 25, 50, 100], this.disable = (0, _lodash.isBoolean)(disable) ? disable : true;
     var div = createDiv.bind(this)();
 
