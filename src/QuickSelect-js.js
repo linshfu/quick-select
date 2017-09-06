@@ -16,6 +16,7 @@ export default function QuickSelect(options = {}) {
   this.setHeaderHeight = isNumber(options.setHeaderHeight) ? options.setHeaderHeight : 0
   this.setItemsFormat = isFunction(options.setItemsFormat) ? options.setItemsFormat : null
   this.setClass = isFunction(options.setClass) ? options.setClass : className => className
+  this.setMax = isNumber(options.setMax) ? options.setMax : 1000000
   this.setLang = isFunction(options.setLang) ? options.setLang : item => {
     return { items: `下注 ${item} 元`, disable: '停用'}
   }
@@ -209,7 +210,7 @@ function checkAliveDom(elements) {
 function format (items) {
   return this.setItemsFormat !== null
   ? this.setItemsFormat(items)
-  : take(sortBy(filter(items, n => isNumber(n) && n > 0 && n <= 1000000 && n % 1 === 0)), 10)
+  : take(sortBy(filter(items, n => isNumber(n) && n > 0 && n <= this.setMax && n % 1 === 0)), 10)
 }
 
 function initial (items = this.items, disable = this.disable) {
