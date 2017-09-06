@@ -66,9 +66,10 @@ window.testDisable = testDisable
 
 const options = {
   el: elements,
-  items: [123,223,323,423,523,623,723,823,923,435],
+  items: [123,223,323,423,9999,623,723,823,923,435],
   disable: false,
-  setHeaderHeight: 116
+  setHeaderHeight: 116,
+  setMax: 9999
 }
 
 const s = QuickSelect.init(options)

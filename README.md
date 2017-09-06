@@ -34,6 +34,8 @@
       },
       
       setHeaderHeight: 116,                    // default: 0
+
+      setMax: 99999999                         // default: 1000000
     })
 
     qs.bind(document.querySelectorAll('.Input'))

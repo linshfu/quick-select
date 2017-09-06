@@ -27,6 +27,7 @@
     this.setClass = (0, _lodash.isFunction)(options.setClass) ? options.setClass : function (className) {
       return className;
     };
+    this.setMax = (0, _lodash.isNumber)(options.setMax) ? options.setMax : 1000000;
     this.setLang = (0, _lodash.isFunction)(options.setLang) ? options.setLang : function (item) {
       return { items: '\u4E0B\u6CE8 ' + item + ' \u5143', disable: '停用' };
     };
@@ -289,8 +290,10 @@
   }
 
   function format(items) {
+    var _this4 = this;
+
     return this.setItemsFormat !== null ? this.setItemsFormat(items) : (0, _lodash.take)((0, _lodash.sortBy)((0, _lodash.filter)(items, function (n) {
-      return (0, _lodash.isNumber)(n) && n > 0 && n <= 1000000 && n % 1 === 0;
+      return (0, _lodash.isNumber)(n) && n > 0 && n <= _this4.setMax && n % 1 === 0;
     })), 10);
   }
 
