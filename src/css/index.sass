@@ -30,7 +30,7 @@ $c-qsBorder: #455964
 
 // ----- component ----- //
 .quickSelect
-  display: block
+  display: none
   position: absolute
   top: 135px
   left: 20px
@@ -41,9 +41,6 @@ $c-qsBorder: #455964
   box-shadow: 4px 4px 8px rgba(0,0,0,0.3)
   font-size: 13px
   font-family: "微軟正黑體", Arial
-  min-width: 60px
-  max-width: 150px
-  width: 100px
   &::before, &::after
     content: ''
     position: absolute
@@ -92,6 +89,10 @@ $c-qsBorder: #455964
     display: block
     padding: 3px 10px
     border-bottom: 1px solid #eee
+    min-width: 60px
+    max-width: 150px
+    white-space: nowrap
+    box-sizing: border-box
     &:last-child
       color: darken(red, 10%)
       border-bottom: none

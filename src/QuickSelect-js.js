@@ -45,7 +45,7 @@ export default function QuickSelect(options = {}) {
   )
 
   this.event.body.push(
-    // addAndRemove(window, { resize: hide.bind(this) })
+    addAndRemove(window, { resize: hide.bind(this) })
   )
 
   this.bind = (el = {}) => {
