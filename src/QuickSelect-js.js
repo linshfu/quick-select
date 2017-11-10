@@ -160,7 +160,9 @@ function show (el) {
     this.div.classList.add(this.setClass('is-active'))
     const i = el.getBoundingClientRect()
     const d = this.div.getBoundingClientRect()
+    const scrollx = window.scrollX || window.pageXOffset
     const scrolly = window.scrollY || window.pageYOffset
+
     const pos = {
       top: `${
         (i.top - d.height < this.setHeaderHeight + 15)
@@ -168,7 +170,7 @@ function show (el) {
         : i.top - d.height + scrolly - 15
       }px`,
       left: `${
-        i.left + i.width / 2 - d.width /2
+        i.left + i.width / 2 - d.width /2 + scrollx
       }px`
     }
     if (i.top - d.height < this.setHeaderHeight + 15) {

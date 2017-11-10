@@ -34,7 +34,7 @@ window.testRemove = testRemove
 window.testDisable = testDisable
 
 // const options = {
-//   el: add,
+//   el: elements,
 //   items: [1,2,3,4,5],
 //   disable: false,
 //   beforeShow () {
@@ -52,10 +52,10 @@ window.testDisable = testDisable
 //   },
 //   setItemsFormat (items) {
 //     return items
-  // },
-  // setClass (className) {
-  //   return `prefix-${className}`
-  // },
+//   },
+//   setClass (className) {
+//     return `prefix-${className}`
+//   },
 //   setLang (item) {
 //     return {
 //       items: `bet $${item}`,
