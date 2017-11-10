@@ -34,42 +34,42 @@ window.testRemove = testRemove
 window.testDisable = testDisable
 
 // const options = {
-//   el: elements,
-//   items: [1,2,3,4,5],
-//   disable: false,
-//   beforeShow () {
-//     const test = () => {
-//       for (const item of elements) {
-//         console.log('beforeShow')
-//       }
-//     }
-//     return new Promise((resolve) => {
-//       setTimeout(() => resolve(test()), 500)
-//     })
-//   },
-//   afterDisable () {
-//     console.log('Disable')
-//   },
-//   setItemsFormat (items) {
-//     return items
-//   },
-//   setClass (className) {
-//     return `prefix-${className}`
-//   },
-//   setLang (item) {
-//     return {
-//       items: `bet $${item}`,
-//       disable: 'disable'
-//     }
-//   }
+  // el: elements,
+  // items: [1,2,3,4,5, 999999],
+  // disable: false,
+  // beforeShow () {
+  //   const test = () => {
+  //     for (const item of elements) {
+  //       console.log('beforeShow')
+  //     }
+  //   }
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => resolve(test()), 500)
+  //   })
+  // },
+  // afterDisable () {
+  //   console.log('Disable')
+  // },
+  // setItemsFormat (items) {
+  //   return items
+  // },
+  // setClass (className) {
+  //   return `prefix-${className}`
+  // },
+  // setLang (item) {
+  //   return {
+  //     items: `${item}`,
+  //     disable: 'disable'
+  //   }
+  // }
 // }
 
 const options = {
   el: elements,
-  items: [123,223,323,423,9999,623,723,823,923,435],
+  items: [123,223,323,423,9999999999,623,723,823,923,435],
   disable: false,
   setHeaderHeight: 116,
-  setMax: 9999
+  setMax: 9999999999
 }
 
 const s = QuickSelect.init(options)

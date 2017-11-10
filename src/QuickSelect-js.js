@@ -44,6 +44,10 @@ export default function QuickSelect(options = {}) {
     addAndRemove(document, { click: clickOut.bind(this) })
   )
 
+  this.event.body.push(
+    // addAndRemove(window, { resize: hide.bind(this) })
+  )
+
   this.bind = (el = {}) => {
     this.event.el = checkAliveDom(this.event.el)
 
