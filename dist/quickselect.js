@@ -53,6 +53,8 @@
 
     this.event.body.push(addAndRemove(document, { click: clickOut.bind(this) }));
 
+    this.event.body.push(addAndRemove(window, { resize: hide.bind(this) }));
+
     this.bind = function () {
       var el = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 

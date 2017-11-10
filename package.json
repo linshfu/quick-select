@@ -1,6 +1,6 @@
 {
   "name": "quick-select",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "description": "quick-select",
   "main": "dist/quickselect.min.js",
   "scripts": {
