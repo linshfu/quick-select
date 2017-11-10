@@ -248,10 +248,12 @@
       this.div.classList.add(this.setClass('is-active'));
       var i = el.getBoundingClientRect();
       var d = this.div.getBoundingClientRect();
+      var scrollx = window.scrollX || window.pageXOffset;
       var scrolly = window.scrollY || window.pageYOffset;
+
       var pos = {
         top: (i.top - d.height < this.setHeaderHeight + 15 ? i.top + scrolly + i.height + 15 : i.top - d.height + scrolly - 15) + 'px',
-        left: i.left + i.width / 2 - d.width / 2 + 'px'
+        left: i.left + i.width / 2 - d.width / 2 + scrollx + 'px'
       };
       if (i.top - d.height < this.setHeaderHeight + 15) {
         this.div.classList.add(this.setClass('is-top'));

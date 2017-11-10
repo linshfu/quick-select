@@ -1,12 +1,12 @@
 {
   "name": "quick-select",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "quick-select",
   "main": "dist/quickselect.min.js",
   "scripts": {
     "build:babel": "npm run clear && npm run build:babel:umd && npm run build:babel:min",
-    "build:babel:umd": "babel --no-babelrc src/QuickSelect-js.js -o ./dist/quickselect.js --presets=es2015,stage-0 --plugins=add-module-exports,transform-es2015-modules-umd",
-    "build:babel:min": "babel --no-babelrc src/QuickSelect-js.js -o ./dist/quickselect.min.js --presets=es2015,stage-0 --plugins=add-module-exports,transform-es2015-modules-umd --compact=true",
+    "build:babel:umd": "npx babel --no-babelrc src/QuickSelect-js.js -o ./dist/quickselect.js --presets=es2015,stage-0 --plugins=add-module-exports,transform-es2015-modules-umd",
+    "build:babel:min": "npx babel --no-babelrc src/QuickSelect-js.js -o ./dist/quickselect.min.js --presets=es2015,stage-0 --plugins=add-module-exports,transform-es2015-modules-umd --compact=true",
     "build": "webpack",
     "clear": "rm -rf dist && mkdir dist",
     "dev": "webpack-dashboard -- nodemon --config nodemon.json ./server.js",
@@ -28,6 +28,7 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
     "babel-plugin-add-module-exports": "^0.2.1",
