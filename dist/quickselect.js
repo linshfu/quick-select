@@ -103,6 +103,8 @@
       _this.div.parentNode.removeChild(_this.div);
     };
 
+    this.close = hide.bind(this);
+
     return this;
   }
 

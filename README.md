@@ -44,3 +44,5 @@
 
     qs.remove()
 
+    qs.close()                                 // close select menu
+
