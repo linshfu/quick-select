@@ -73,6 +73,8 @@ export default function QuickSelect(options = {}) {
     this.div.parentNode.removeChild(this.div)
   }
 
+  this.close = hide.bind(this)
+
   return this
 }
 
