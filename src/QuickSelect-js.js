@@ -222,7 +222,6 @@ function checkAliveDom(elements) {
 }
 
 function format (items) {
-  console.log(this.setMax)
   return this.setItemsFormat !== null
   ? this.setItemsFormat(items)
   : take(sortBy(filter(items, n => isNumber(n) && n > 0 && n <= this.setMax && n % 1 === 0)), 10)
