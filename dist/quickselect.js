@@ -98,6 +98,12 @@
       _this.div = initial.bind(_this)(items, disable);
     };
 
+    this.updateMax = function (max) {
+      _this.event.el = checkAliveDom(_this.event.el);
+
+      _this.div = updateMax.bind(_this)(max);
+    };
+
     this.remove = function () {
       unbind.bind(_this)();
       _this.div.parentNode.removeChild(_this.div);
@@ -308,7 +314,20 @@
     var disable = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.disable;
 
     if (this.div) this.div.parentNode.removeChild(this.div);
-    this.items = (0, _lodash.isArray)(items) ? format.bind(this)(items) : [10, 25, 50, 100], this.disable = (0, _lodash.isBoolean)(disable) ? disable : true;
+    this.items = (0, _lodash.isArray)(items) ? format.bind(this)(items) : [10, 25, 50, 100];
+    this.disable = (0, _lodash.isBoolean)(disable) ? disable : true;
+    var div = createDiv.bind(this)();
+
+    return div;
+  }
+
+  function updateMax() {
+    var max = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.setMax;
+
+    if (this.div) this.div.parentNode.removeChild(this.div);
+    var items = this.items;
+    this.setMax = (0, _lodash.isNumber)(max) ? max : 1000000;
+    this.items = (0, _lodash.isArray)(items) ? format.bind(this)(items) : [10, 25, 50, 100];
     var div = createDiv.bind(this)();
 
     return div;

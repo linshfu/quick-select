@@ -32,7 +32,7 @@
           disable: 'disable'
         }
       },
-      
+
       setHeaderHeight: 116,                    // default: 0
 
       setMax: 99999999                         // default: 1000000
@@ -41,6 +41,8 @@
     qs.bind(document.querySelectorAll('.Input'))
 
     qs.updateData([10, 25, 50, 100], true)
+
+    qs.updateMax(number)
 
     qs.remove()
 
