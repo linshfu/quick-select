@@ -68,6 +68,12 @@ export default function QuickSelect(options = {}) {
     this.div = initial.bind(this)(items, disable)
   }
 
+  this.updateMax = (max) => {
+    this.event.el = checkAliveDom(this.event.el)
+
+    this.div = updateMax.bind(this)(max)
+  }
+
   this.remove = () => {
     unbind.bind(this)()
     this.div.parentNode.removeChild(this.div)
@@ -216,6 +222,7 @@ function checkAliveDom(elements) {
 }
 
 function format (items) {
+  console.log(this.setMax)
   return this.setItemsFormat !== null
   ? this.setItemsFormat(items)
   : take(sortBy(filter(items, n => isNumber(n) && n > 0 && n <= this.setMax && n % 1 === 0)), 10)
@@ -225,6 +232,16 @@ function initial (items = this.items, disable = this.disable) {
   if (this.div) this.div.parentNode.removeChild(this.div)
   this.items = isArray(items) ? format.bind(this)(items) : [10, 25, 50, 100],
   this.disable = isBoolean(disable) ? disable : true
+  const div = createDiv.bind(this)()
+
+  return div
+}
+
+function updateMax (max = this.setMax) {
+  if (this.div) this.div.parentNode.removeChild(this.div)
+  const items = this.items
+  this.setMax = isNumber(max) ? max : 1000000
+  this.items = isArray(items) ? format.bind(this)(items) : [10, 25, 50, 100]
   const div = createDiv.bind(this)()
 
   return div
